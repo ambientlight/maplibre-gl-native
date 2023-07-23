@@ -69,6 +69,9 @@ public:
 
     void setFeatureState(const std::string& sourceID, const optional<std::string>& sourceLayerID,
                          const std::string& featureID, const FeatureState& state);
+    
+    void setFeatureState(const std::string& sourceID, const optional<std::string>& sourceLayerID,
+                         const std::string& featureID, const std::string& jsonState);
 
     void getFeatureState(FeatureState& state,
                          const std::string& sourceID,

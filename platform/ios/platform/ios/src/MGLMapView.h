@@ -2026,6 +2026,11 @@ MGL_EXPORT
  */
 - (NSArray<id <MGLFeature>> *)visibleFeaturesInRect:(CGRect)rect inStyleLayersWithIdentifiers:(nullable NSSet<NSString *> *)styleLayerIdentifiers predicate:(nullable NSPredicate *)predicate NS_SWIFT_NAME(visibleFeatures(in:styleLayerIdentifiers:predicate:));
 
+#pragma mark Feature State
+
+- (void)setFeatureStateInSource:(NSString*)sourceID withSourceLayer:(nullable NSString*)sourceLayerID forFeature:(NSString*)featureID withState:(NSData*)state encoding:(NSStringEncoding)encoding
+    NS_SWIFT_NAME(setFeatureState(in:sourceLayerId:feature:state:encoding:));
+
 #pragma mark Debugging the Map
 
 /**

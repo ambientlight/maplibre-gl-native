@@ -92,12 +92,12 @@ void SourceFeatureState::coalesceChanges(std::vector<RenderTile>& tiles) {
     stateChanges.clear();
     deletedStates.clear();
 
-    if (changes.empty()) {
-        return;
-    }
+//    if (changes.empty()) {
+//        return;
+//    }
 
     for (auto& tile : tiles) {
-        tile.setFeatureState(changes);
+        tile.setFeatureState(currentStates);
     }
 }
 

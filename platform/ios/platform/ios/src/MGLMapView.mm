@@ -12,6 +12,9 @@
 #include <mbgl/style/style.hpp>
 #include <mbgl/style/image.hpp>
 #include <mbgl/style/transition_options.hpp>
+
+#include <mbgl/style/conversion/get_json_type.hpp>
+//#include <mbgl/style/conversion/json.hpp>
 #include <mbgl/gl/custom_layer.hpp>
 #include <mbgl/renderer/renderer.hpp>
 #include <mbgl/math/wrap.hpp>
@@ -24,6 +27,7 @@
 #include <mbgl/util/run_loop.hpp>
 #include <mbgl/util/string.hpp>
 #include <mbgl/util/projection.hpp>
+//#include <mbgl/util/rapidjson.hpp>
 
 #import "Mapbox.h"
 #import "MGLShape_Private.h"
@@ -7236,6 +7240,31 @@ static void *windowScreenContext = &windowScreenContext;
     [self performSelector:@selector(attemptBackgroundSnapshot)
                withObject:nil
                afterDelay:MGLBackgroundSnapshotImageIdleDelay];
+}
+
+- (void)setFeatureStateInSource:(NSString*)sourceID withSourceLayer:(nullable NSString*)sourceLayerID forFeature:(NSString*)featureID withState:(NSData*)state encoding:(NSStringEncoding)encoding {
+    
+//    mbgl::FeatureState newState = {{"magic", 4}};
+//    _rendererFrontend->getRenderer()->setFeatureState(std::string([sourceID UTF8String]), std::string([sourceLayerID UTF8String]), std::string([featureID UTF8String]), newState);
+    
+    NSError* __strong * outError = nullptr;
+    NSString *jsonState = [[NSString alloc] initWithData:state encoding:encoding];
+    if (!jsonState) {
+        if (outError) {
+            *outError = [NSError errorWithDomain:MGLErrorDomain code:MGLErrorCodeUnknown userInfo:nil];
+        }
+    }
+
+    try {
+        _rendererFrontend->getRenderer()->setFeatureState(std::string([sourceID UTF8String]), std::string([sourceLayerID UTF8String]), std::string([featureID UTF8String]), std::string([jsonState UTF8String]));
+        _rendererFrontend->render();
+    } catch (std::runtime_error &err) {
+        if (outError) {
+            *outError = [NSError errorWithDomain:MGLErrorDomain code:MGLErrorCodeUnknown userInfo:@{
+                NSLocalizedFailureReasonErrorKey: @(err.what()),
+            }];
+        }
+    }
 }
 
 @end

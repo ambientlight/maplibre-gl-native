@@ -283,7 +283,8 @@ CLLocationCoordinate2D randomWorldCoordinate(void) {
         UIWindow *helperWindow = [[UIWindow alloc] initWithFrame:helperScreen.bounds];
         helperWindow.screen = helperScreen;
         UIViewController *helperViewController = [[UIViewController alloc] init];
-        MGLMapView *helperMapView = [[MGLMapView alloc] initWithFrame:helperWindow.bounds styleURL:[[MGLStyle predefinedStyle:@"Hybrid"] url]];
+        //MGLMapView *helperMapView = [[MGLMapView alloc] initWithFrame:helperWindow.bounds styleURL:[[MGLStyle predefinedStyle:@"Hybrid"] url]];
+        MGLMapView *helperMapView = [[MGLMapView alloc] initWithFrame:helperWindow.bounds styleURL:[NSURL URLWithString:@"https://glasssh.blob.core.windows.net/tests/style.json"]];
         helperMapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         helperMapView.camera = self.mapView.camera;
         helperMapView.compassView.hidden = YES;
@@ -323,6 +324,11 @@ CLLocationCoordinate2D randomWorldCoordinate(void) {
 
 - (IBAction)showSettings:(__unused id)sender
 {
+    NSString* featureState = @"{\"override-background\": true, \"color\": \"#00FF00\"}";
+    [self.mapView setFeatureStateInSource:@"maplibre" withSourceLayer:@"countries" forFeature:@"185" withState:[featureState dataUsingEncoding:NSUTF8StringEncoding] encoding:NSUTF8StringEncoding];
+    [self.mapView setFeatureStateInSource:@"maplibre" withSourceLayer:@"countries" forFeature:@"186" withState:[featureState dataUsingEncoding:NSUTF8StringEncoding] encoding:NSUTF8StringEncoding];
+    
+    /*
     self.randomWalk = NO;
 
     UITableViewController *settingsViewController = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -333,6 +339,7 @@ CLLocationCoordinate2D randomWorldCoordinate(void) {
     UINavigationController *wrapper = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
     wrapper.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
     [self.navigationController presentViewController:wrapper animated:YES completion:nil];
+    */
 }
 
 - (void)dismissSettings:(__unused id)sender
@@ -1907,7 +1914,7 @@ CLLocationCoordinate2D randomWorldCoordinate(void) {
     
     /// Style that does not require an `apiKey` nor any further configuration
     [self.styleNames addObject:@"MapLibre Basic"];
-    [self.styleURLs addObject:[NSURL URLWithString:@"https://demotiles.maplibre.org/style.json"]];
+    [self.styleURLs addObject:[NSURL URLWithString:@"https://glasssh.blob.core.windows.net/tests/style.json"]];
 
     /// Add Mapbox Styles if an `apiKey` exists
     NSString* apiKey = [MGLSettings apiKey];

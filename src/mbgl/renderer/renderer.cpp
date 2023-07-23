@@ -6,6 +6,8 @@
 #include <mbgl/gfx/backend_scope.hpp>
 #include <mbgl/annotation/annotation_manager.hpp>
 
+#include <mbgl/util/feature_state_parser.hpp>
+
 namespace mbgl {
 
 Renderer::Renderer(gfx::RendererBackend& backend, float pixelRatio_, const optional<std::string>& localFontFamily_)
@@ -109,6 +111,34 @@ FeatureExtensionValue Renderer::queryFeatureExtensions(const std::string& source
 void Renderer::setFeatureState(const std::string& sourceID, const optional<std::string>& sourceLayerID,
                                const std::string& featureID, const FeatureState& state) {
     impl->orchestrator.setFeatureState(sourceID, sourceLayerID, featureID, state);
+}
+
+void Renderer::setFeatureState(const std::string& sourceID, const optional<std::string>& sourceLayerID,
+                               const std::string& featureID, const std::string& jsonState) {
+    
+    // NOTE: I wasn't able to define Converter<FeatureState>::operator() and get through
+    //       implicit instantiation of undefined template for some reason
+    //       if it'd like to utilize conversion::convertJSON
+    
+    /*
+    style::conversion::Error error;
+    optional<FeatureState> state = style::conversion::convertJSON<FeatureState>(jsonState, error);
+    if(state == nullopt){
+        
+    } else {
+        impl->orchestrator.setFeatureState(sourceID, sourceLayerID, featureID, *state);
+    }
+    */
+    
+    // so I went ahead and defined a FeatureStateParser in a similar manner to how style is parsed
+    
+    auto parser = util::FeatureStateParser();
+    util::FeatureStateParseResult parseError = parser.parse(jsonState);
+    if(parseError != nullptr){
+        
+    } else {
+        impl->orchestrator.setFeatureState(sourceID, sourceLayerID, featureID, parser.state);
+    }
 }
 
 void Renderer::getFeatureState(FeatureState& state, const std::string& sourceID,

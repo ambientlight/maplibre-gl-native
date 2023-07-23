@@ -20,8 +20,8 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "@mapbox/cmake-node-module": "^1.2.0",
+    "@mapbox/node-pre-gyp": "^1.0.9",
     "minimatch": "^3.0.4",
-    "node-pre-gyp": "^0.10.2",
     "npm-run-all": "^4.0.2"
   },
   "devDependencies": {
@@ -55,7 +55,7 @@
     "node": ">=6"
   },
   "scripts": {
-    "install": "node-pre-gyp install --fallback-to-build=false",
+    "install": "node-pre-gyp install --fallback-to-build=true",
     "test": "tape platform/node/test/js/**/*.test.js",
     "test-memory": "node --expose-gc platform/node/test/memory.test.js",
     "test-expressions": "node -r esm platform/node/test/expression.test.js",

@@ -403,6 +403,7 @@ void GeometryTile::setFeatureState(const LayerFeatureStates& states) {
 
     auto& layerIdToLayerRenderData = layoutResult->layerRenderData;
     for (auto& layer : layerIdToLayerRenderData) {
+        // FIXME: this is invalid: layerId is a layer name, we will find only source layers with same name as layer
         const auto& layerID = layer.first;
         const auto sourceLayer = layers->getLayer(layerID);
         if (sourceLayer) {
